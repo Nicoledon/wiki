@@ -13,17 +13,36 @@ class NewTaskForm(forms.Form):
             })
       )
 class NewModifyTaskForm(forms.Form):
-      headline =  forms.CharField(label= "headline")
-      content =  forms.CharField(label= "content", widget=forms.Textarea)
+      headline =  forms.CharField(label= "headline" , widget=forms.Textarea(attrs={
+          'class': 'form-control',
+          'style' : 'width:300px; height:40px'
+      }))
+      content =  forms.CharField(label= "content", widget=forms.Textarea(attrs={
+           'class':'form-control',
+           'style':'width:300px;height;200px',
+           'row':3
+      }))
 
 
 class NewEditTaskForm(forms.Form):
-      content = forms.CharField(label = "content", widget=forms.Textarea)  
+      content = forms.CharField(label = "content", widget=forms.Textarea(attrs={
+           'class':'form-control',
+           'style':'width:300px;height;200px',
+           'row':3
+      }
+      ))  
       def __init__(self, *args, content_placeholder=None, **kwargs):
         super().__init__(*args, **kwargs)
         if content_placeholder:
             self.fields['content'].widget.attrs['placeholder'] = content_placeholder
 tasks = util.list_entries() 
+def option(str):
+    container = []
+    # import pdb; pdb.set_trace()
+    for task in tasks:
+        if str in task:
+            container.append(task)
+    return container
 def index(request):
     if request.method == "POST":
         form = NewTaskForm(request.POST)
@@ -32,8 +51,9 @@ def index(request):
             if task in tasks:
                 return HttpResponseRedirect(reverse("page", args=[task]))
             else :
-                return render(request , "encyclopedia/index.html", {
-                       "form":form
+                container = option(task)
+                return render(request ,"encyclopedia/option.html" , {
+                    "container":container 
                 })
     else:
         return render(request, "encyclopedia/index.html", {

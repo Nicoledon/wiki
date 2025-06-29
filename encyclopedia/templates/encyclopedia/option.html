@@ -1,0 +1,16 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    option
+{% endblock %}
+
+{% block body %}
+    <h1>YOU MAY WANT TO FIND</h1>
+
+    <ul>
+        {% for item in container %}
+           <a href = "{%url 'page' item%}"><li>{{ item }}</li></a>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
