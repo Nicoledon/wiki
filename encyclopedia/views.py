@@ -77,6 +77,8 @@ def modify(request):
         if form.is_valid():
             headline = form.cleaned_data["headline"]
             content = form.cleaned_data["content"]
+            if headline in tasks:
+                return render(request , "encyclopedia/error.html")
             util.save_entry(headline,content)
             return HttpResponseRedirect(reverse("index"))      
         else :
