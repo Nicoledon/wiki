@@ -11,7 +11,10 @@ class NewTaskForm(forms.Form):
              'placeholder':'Search Encyclopedia'
             })
       )
-tasks = util.list_entries()
+class NewModifyTaskForm(forms.Form):
+      headline =  forms.CharField(label= "headline")
+      content =  forms.CharField(label= "content")
+tasks = util.list_entries() 
 def index(request):
     if request.method == "POST":
         form = NewTaskForm(request.POST)
@@ -40,5 +43,18 @@ def page(request , headline):
          "exist" : exist 
     })
 def modify(request):
-
-    return render(request, "encyclopedia/modify.html")
+    if request.method == "POST":
+        form = NewModifyTaskForm(request.POST)
+        if form.is_valid():
+            headline = form.cleaned_data["headline"]
+            content = form.cleaned_data["content"]
+            util.save_entry(headline,content)
+            return HttpResponseRedirect(reverse("index"))      
+        else :
+            return render(request, "encyclopedia/modify.html", {
+                   "newform": form
+        })
+    else:
+        return render(request, "encyclopedia/modify.html", {
+            "newform": NewModifyTaskForm()
+    })
