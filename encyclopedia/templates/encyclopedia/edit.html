@@ -6,8 +6,9 @@
 
 {% block body %}
    <h1>{{elem}}</h1>
-<form> 
+  <form action = "{% url 'edit' elem %}" method = "post"> 
  {% csrf_token %}
   {{ contentedit }}
+  <button type = "submit">submit</button>
 </form>
 {% endblock %}

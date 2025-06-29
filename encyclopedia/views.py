@@ -17,7 +17,6 @@ class NewModifyTaskForm(forms.Form):
 
 
 class NewEditTaskForm(forms.Form):
-      headline = forms.CharField(label = "headline")
       content = forms.CharField(label = "content", widget=forms.Textarea)  
       def __init__(self, *args, content_placeholder=None, **kwargs):
         super().__init__(*args, **kwargs)
@@ -68,7 +67,19 @@ def modify(request):
             "newform": NewModifyTaskForm()
     })
 def edit(request, elem):
-    return render(request, "encyclopedia/edit.html", {
-           "elem":elem,
-           "contentedit":NewEditTaskForm(content_placeholder=util.get_entry(elem))
-    })
+    if request.method == "POST":
+        form = NewEditTaskForm(request.POST)
+        if form.is_valid():
+            content = form.cleaned_data["content"]
+            util.save_entry(elem,content)
+            return HttpResponseRedirect(reverse("index"))      
+        else :
+            return render(request, "encyclopedia/edit.html", {
+                   "elem":elem, 
+                   "contentedit": form
+        })
+    else :
+        return render(request, "encyclopedia/edit.html", {
+               "elem":elem,
+               "contentedit":NewEditTaskForm(content_placeholder=util.get_entry(elem))
+        })
