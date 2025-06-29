@@ -4,6 +4,7 @@ from django import forms
 from . import util
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+import random
 class NewTaskForm(forms.Form):
       task = forms.CharField(
           widget=forms.TextInput(attrs={
@@ -83,3 +84,7 @@ def edit(request, elem):
                "elem":elem,
                "contentedit":NewEditTaskForm(content_placeholder=util.get_entry(elem))
         })
+def randoms(request):
+    container = util.list_entries()
+    item = random.choice(container)
+    return HttpResponseRedirect(reverse("page",args=[item]))
