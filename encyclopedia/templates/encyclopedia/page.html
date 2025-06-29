@@ -5,10 +5,11 @@
 {% endblock %}
 
 {% block body %}
-    <h1>All Pages</h1>
+    <h1>{{headline}}</h1>
     <div>
      {%if exist%} 
      <p> {{content}}</p>
+     <a href = "{% url 'edit' headline %}"> edit </a>
      {%else%}
      <p>This is a error message</p>
      {% endif %}

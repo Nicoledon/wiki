@@ -13,7 +13,16 @@ class NewTaskForm(forms.Form):
       )
 class NewModifyTaskForm(forms.Form):
       headline =  forms.CharField(label= "headline")
-      content =  forms.CharField(label= "content")
+      content =  forms.CharField(label= "content", widget=forms.Textarea)
+
+
+class NewEditTaskForm(forms.Form):
+      headline = forms.CharField(label = "headline")
+      content = forms.CharField(label = "content", widget=forms.Textarea)  
+      def __init__(self, *args, content_placeholder=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if content_placeholder:
+            self.fields['content'].widget.attrs['placeholder'] = content_placeholder
 tasks = util.list_entries() 
 def index(request):
     if request.method == "POST":
@@ -57,4 +66,9 @@ def modify(request):
     else:
         return render(request, "encyclopedia/modify.html", {
             "newform": NewModifyTaskForm()
+    })
+def edit(request, elem):
+    return render(request, "encyclopedia/edit.html", {
+           "elem":elem,
+           "contentedit":NewEditTaskForm(content_placeholder=util.get_entry(elem))
     })

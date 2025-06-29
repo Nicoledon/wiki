@@ -1,0 +1,13 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    {{elem}}
+{% endblock %}
+
+{% block body %}
+   <h1>{{elem}}</h1>
+<form> 
+ {% csrf_token %}
+  {{ contentedit }}
+</form>
+{% endblock %}
