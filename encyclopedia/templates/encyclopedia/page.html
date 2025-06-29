@@ -5,10 +5,9 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{headline}}</h1>
     <div>
      {%if exist%} 
-     <p> {{content}}</p>
+     {{content | safe}}
      <a href = "{% url 'edit' headline %}"> edit </a>
      {%else%}
      <p>This is a error message</p>

@@ -5,6 +5,7 @@ from . import util
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 import random
+import markdown2
 class NewTaskForm(forms.Form):
       task = forms.CharField(
           widget=forms.TextInput(attrs={
@@ -20,7 +21,6 @@ class NewModifyTaskForm(forms.Form):
       content =  forms.CharField(label= "content", widget=forms.Textarea(attrs={
            'class':'form-control',
            'style':'width:300px;height;200px',
-           'row':3
       }))
 
 
@@ -38,7 +38,6 @@ class NewEditTaskForm(forms.Form):
 tasks = util.list_entries() 
 def option(str):
     container = []
-    # import pdb; pdb.set_trace()
     for task in tasks:
         if str in task:
             container.append(task)
@@ -66,9 +65,10 @@ def page(request , headline):
    exist = False
    if headline in entries:
        exist = True
+       html = markdown2.markdown(util.get_entry(headline))
    return render(request, "encyclopedia/page.html", {
         "headline":headline,
-         "content":util.get_entry(headline),
+         "content":html,
          "exist" : exist 
     })
 def modify(request):
